@@ -28,9 +28,13 @@ The focus is not initially on the pure performance of the implementation that ca
 
 You can find the report at :
 
-https://github.com/sabasallath/nooverlap-derived-filtering-algorithm/ter_run/raw/master/rapport/ter-rapport.pdf
+[Link to report (in french)](https://github.com/sabasallath/nooverlap-derived-filtering-algorithm/raw/master/rapport/ter-rapport.pdf)
 
 ## Implementation
+
+### Documentation
+
+[Link to documentation](https://sabasallath.github.io/nooverlap-derived-filtering-algorithm/index)
 
 ### Requirements
 
