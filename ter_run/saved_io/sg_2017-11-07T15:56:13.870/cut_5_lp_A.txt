@@ -1,0 +1,24 @@
+output/solutionsGrids/sg_2017-11-07T15:56:13.870/cut_5.txt
+lp
+Cut : A
+0:[0-1, 0-1](1)
+1:[0-1, 0-1](1)
+@:[0-0, 2-1](2)
+
+Domain solution gridxit
+     0     1
+     0     1
+     1     0
+     -     -
+     0     0
+Domain solution gridyit
+     0     1
+     0     1
+     1     0
+     -     -
+     0     0
+
+cpMakespan : 2.0
+cpFeasible : true
+Status : Optimal
+z : 0.0

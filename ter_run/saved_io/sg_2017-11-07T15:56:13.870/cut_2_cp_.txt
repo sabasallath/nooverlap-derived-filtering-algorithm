@@ -1,0 +1,18 @@
+output/solutionsGrids/sg_2017-11-07T15:56:13.870/cut_2.txt
+cp
+Cut : 
+0:[0-3, 1-4](2)
+1:[0-3, 1-4](2)
+@:[0-0, 4-4](4)
+data
+0: [0;4](2)
+1: [0;4](2)
+
+Solution:
+T0[1: 0..2 -- (2)2 --> 2..4]
+T1[1: 0..2 -- (2)2 --> 2..4]
+
+cpMakespan : 4.0
+cpFeasible : true
+Status : Optimal
+z : 4.0

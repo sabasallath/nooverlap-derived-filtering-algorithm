@@ -1,0 +1,15 @@
+output/solutionsGrids/sg_2017-11-07T15:56:13.870/report_1.txt
+cp
+Cut : 
+0:[0-1, 1-2](2)
+1:[0-1, 2-3](3)
+@:[0-0, 5-3](5)
+data
+0: [0;2](2)
+1: [0;3](3)
+
+
+cpMakespan : 0.0
+cpFeasible : false
+Status : Infeasible
+z : 0.0
