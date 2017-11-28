@@ -6,7 +6,7 @@ import javax.annotation.concurrent.Immutable;
  * A DomainSlot is just an encapsulation of job id (i) an time t (t).
  */
 @Immutable
-public final class DomainSlot {
+public final class DomainSlot implements Comparable<DomainSlot>{
     final private int i;
     final private int t;
 
@@ -53,5 +53,14 @@ public final class DomainSlot {
         int result = i;
         result = 31 * result + t;
         return result;
+    }
+
+    @Override
+    public int compareTo(DomainSlot other) {
+        if (this.getT() != other.getT()) {
+            return this.getI() - other.getI();
+        } else {
+            return this.getT() - other.getT();
+        }
     }
 }

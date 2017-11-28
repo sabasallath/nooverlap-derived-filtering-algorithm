@@ -3,7 +3,10 @@ package generate;
 import customNoOverlap.CustomNoOverlapConstraint;
 import ilog.concert.*;
 import ilog.cp.IloCP;
+import io.LoggerPrintStream;
 import models.ModelCp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,6 +17,7 @@ import java.util.List;
  */
 public class JobShop {
 
+    private final static Logger logger = LoggerFactory.getLogger(JobShopWithBound.class);
     private final String filename;
     private double objValue;
     private String domainBeforePropagation;
@@ -57,6 +61,8 @@ public class JobShop {
         int nbJobs, nbMachines;
 
         IloCP cp = new IloCP();
+        redirectOutputToLogger(cp);
+
         try {
             JobShopDataReader data = new JobShopDataReader(filename);
             nbJobs = data.next();
@@ -99,8 +105,8 @@ public class JobShop {
             IloObjective objective = cp.minimize(makespan);
             cp.add(objective);
 
-//            domainBeforePropagation = domain(cp, machines);
-//            domainSizeBeforePropagation = totalDomainSize(machines);
+            domainBeforePropagation = domain(machines);
+            domainSizeBeforePropagation = totalDomainSize(machines);
 
             cp.propagate();
 
@@ -118,14 +124,33 @@ public class JobShop {
         }
     }
 
+    private void redirectOutputToLogger(IloCP cp) {
+        try {
+            cp.setOut((new PrintStream(new LoggerPrintStream(logger), true, "utf-8")));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static String domain(IloCP cp, IntervalVarList[] machines) throws IloException {
-        StringBuilder sb = new StringBuilder("Domain before propagation\n");
+        StringBuilder sb = new StringBuilder();
         for (IntervalVarList machine : machines) {
             for (IloIntervalVar iloIntervalVar : machine) {
                sb.append(cp.getDomain(iloIntervalVar)).append("\n");
             }
-            sb.append("\n");
         }
+        sb.append("\n");
+        return sb.toString();
+    }
+
+    private static String domain(IntervalVarList[] machines) throws IloException {
+        StringBuilder sb = new StringBuilder();
+        for (IntervalVarList machine : machines) {
+            for (IloIntervalVar iloIntervalVar : machine) {
+                sb.append(iloIntervalVar.getEndMax()).append("\n");
+            }
+        }
+        sb.append("\n");
         return sb.toString();
     }
 
@@ -133,6 +158,14 @@ public class JobShop {
         int taskSize = 0;
         for (IntervalVarList machine : machines) {
             taskSize += ModelCp.getDomainSize(machine.toArray(), cp);
+        }
+        return taskSize;
+    }
+
+    private static int totalDomainSize(IntervalVarList[] machines) {
+        int taskSize = 0;
+        for (IntervalVarList machine : machines) {
+            taskSize += ModelCp.getDomainSize(machine.toArray());
         }
         return taskSize;
     }

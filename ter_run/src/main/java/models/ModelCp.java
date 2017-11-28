@@ -160,7 +160,7 @@ public class ModelCp implements Model {
      * @param tasks Interval variables of each task.
      * @return The domain size before solving the instance.
      */
-    private static int getDomainSize(IloIntervalVar[] tasks) {
+    public static int getDomainSize(IloIntervalVar[] tasks) {
         int domainSize = 0;
 
         for (IloIntervalVar task : tasks) {

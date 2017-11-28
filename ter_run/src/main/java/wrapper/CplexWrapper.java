@@ -4,6 +4,7 @@ import com.google.common.io.ByteStreams;
 import ilog.concert.IloException;
 import ilog.concert.IloNumVar;
 import ilog.cplex.IloCplex;
+import io.LoggerPrintStream;
 import models.TypeModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package wrapper;
+package io;
 
 import org.slf4j.Logger;
 
@@ -11,12 +11,12 @@ import java.io.UnsupportedEncodingException;
  * A simple PrintStream container that redirect
  * an output stream to a logger
  */
-final class LoggerPrintStream extends OutputStream {
+public final class LoggerPrintStream extends OutputStream {
 
     private final ByteArrayOutputStream stream = new ByteArrayOutputStream(1024);
     private final Logger logger;
 
-    LoggerPrintStream(Logger logger) {
+    public LoggerPrintStream(Logger logger) {
         this.logger = logger;
     }
 

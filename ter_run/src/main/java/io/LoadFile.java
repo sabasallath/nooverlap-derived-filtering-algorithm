@@ -13,14 +13,20 @@ import java.util.stream.Collectors;
  * Search and import data from an input folder.
  */
 @Immutable
-public final class GetData {
+public final class LoadFile {
+
+    private final String root;
+
+    public LoadFile(String root) {
+        this.root = root;
+    }
 
     /**
      * Import all files from the specified folder.
      * @param folder Folder to import data from.
      * @return List of file contained in the folder and subfolder.
      */
-    private static List<File> all(String folder) {
+    private List<File> all(String folder) {
         try {
             return Files.walk(Paths.get(folder))
                     .filter(Files::isRegularFile)
@@ -37,8 +43,8 @@ public final class GetData {
      * folder and subfolder.
      * @return List of file contained in the folder and subfolder.
      */
-    public static List<File> all() {
-        return all("input/input_relaxation/");
+    public List<File> all() {
+        return all(this.root);
     }
 
     /**
@@ -48,10 +54,10 @@ public final class GetData {
      * @param filename File name to search.
      * @return List of one file.
      */
-    private static List<File> searchFile(String filename) {
+    private List<File> searchFile(String filename) {
         if (filename == null) throw new NullPointerException();
         try {
-            Optional<File> first = Files.walk(Paths.get("input/input_relaxation/"))
+            Optional<File> first = Files.walk(Paths.get(this.root))
                     .filter(Files::isRegularFile)
                     .map(Path::toFile)
                     .filter(e -> e.getName().equals(filename))
@@ -71,10 +77,10 @@ public final class GetData {
      * @param foldername Folder name to search.
      * @return List of files contained in the folder or subfolder..
      */
-    private static List<File> searchFolder(String foldername) {
+    private List<File> searchFolder(String foldername) {
         if (foldername == null) throw new NullPointerException();
         try {
-            Optional<File> folder = Files.walk(Paths.get("input/input_relaxation/"))
+            Optional<File> folder = Files.walk(Paths.get(this.root))
                     .filter(Files::isDirectory)
                     .map(Path::toFile)
                     .filter(e -> e.getName().equals(foldername))
@@ -99,7 +105,7 @@ public final class GetData {
      *                 input/input_relaxation folder or subfolder the path is optional.
      * @return List of file (only one file in the list if the input is a file name).
      */
-    public static List<File> fromStrings(List<String> strFiles) {
+    public List<File> fromStrings(List<String> strFiles) {
         List<File> res = new LinkedList<>();
 
         for (String strFile : strFiles) {

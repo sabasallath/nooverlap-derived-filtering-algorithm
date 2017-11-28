@@ -4,10 +4,12 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.google.common.collect.ImmutableList;
 import generate.JobShop;
+import generate.JobShopWithBound;
 import generate.Relaxation;
 import generate.SolutionGrids;
 import io.DisplayConst;
-import io.GetData;
+import io.FolderConst;
+import io.LoadFile;
 import models.cut.Cut;
 import models.cut.Cuts;
 import org.slf4j.Logger;
@@ -104,23 +106,35 @@ public class Main {
                     ? ImmutableList.of(Cut.fromString(strCuts))
                     : Cuts.fromString(strCuts);
 
-            List<File> files = strFiles.isEmpty() ? GetData.all() : GetData.fromStrings(strFiles);
+            if (grids || relaxation) {
+                LoadFile loadFile = new LoadFile(FolderConst.RELAXATION.toString());
+                List<File> files = strFiles.isEmpty() ? loadFile.all() : loadFile.fromStrings(strFiles);
 
-            files.forEach(e -> logger.info("Adding "  + e.toString()));
+                files.forEach(e -> logger.info("Adding "  + e.toString()));
 
-            if (grids) {
-                logger.info("Starting grids computation");
-                new SolutionGrids(cuts, files);
+                if (grids) {
+                    logger.info("Starting grids computation");
+                    new SolutionGrids(cuts, files);
+                }
+
+                if (relaxation) {
+                    logger.info("Starting relaxation computation");
+                    new Relaxation(cuts, files);
+                }
             }
 
-            if (relaxation) {
-                logger.info("Starting relaxation computation");
-                new Relaxation(cuts, files);
-            }
 
             if (jobshop) {
+                LoadFile loadFile = new LoadFile(FolderConst.JOBSHOP.toString());
+                List<File> files = strFiles.isEmpty() ? loadFile.all() : loadFile.fromStrings(strFiles);
+
+                files.forEach(e -> logger.info("Adding "  + e.toString()));
                 logger.info("Starting jobshop computation");
-                jobshop_test();
+
+                //jobshop_test();
+                for (File file : files) {
+                    new JobShopWithBound(file.getAbsolutePath());
+                }
             }
 
             } catch (Exception e) {
@@ -136,31 +150,5 @@ public class Main {
         sb.append(strCuts);
         if (cutOnly) sb.append("-C");
         return sb.toString();
-    }
-
-    private static void jobshop_test() {
-        String filename = "input/input_orlib/mt06.txt";
-
-        JobShop notBounded = new JobShop(filename);
-        int objValue = (int) notBounded.getObjValue();
-
-        JobShop bounded = new JobShop(filename, false, objValue);
-        JobShop custom = new JobShop(filename, true, objValue);
-
-        System.out.println(DisplayConst.SEPARATOR.toString());
-        System.out.println(custom.getFilename());
-        System.out.println(DisplayConst.SEPARATOR.toString());
-
-//        System.out.println(bounded.getDomainBeforePropagation());
-//        System.out.println("Size before propagation = " + bounded.getDomainSizeBeforePropagation());
-        System.out.println(DisplayConst.SEPARATOR.toString());
-
-        System.out.println(bounded.getDomainAfterPropagation());
-        System.out.println("Size after propagation = " + bounded.getDomainSizeAfterPropagation());
-
-        System.out.println(DisplayConst.SEPARATOR.toString());
-
-        System.out.println(custom.getDomainAfterPropagation());
-        System.out.println("Size after propagation = " + custom.getDomainSizeAfterPropagation());
     }
 }

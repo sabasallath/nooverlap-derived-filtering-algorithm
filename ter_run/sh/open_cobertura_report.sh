@@ -10,7 +10,7 @@ cd ${SCRIPT_PATH}
 REPORT_FILE=../target/site/cobertura/index.html
 
 if [ ! -f ${REPORT_FILE} ]; then
-    echo "No report Found"
+    echo "No report Found, must run mvn install before"
 else
     echo "Opening ${REPORT_FILE}"
     xdg-open ${REPORT_FILE}

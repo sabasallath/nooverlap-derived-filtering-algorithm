@@ -2,6 +2,7 @@ package customNoOverlap;
 
 import domains.DomainReduction;
 import domains.DomainSlot;
+import generate.JobShopWithBound;
 import ilog.concert.IloException;
 import ilog.concert.IloIntVar;
 import ilog.concert.IloIntervalVar;
@@ -14,17 +15,21 @@ import jobs.jobsException.JobInvalidDurationException;
 import jobs.jobsException.JobInvalidRankException;
 import jobs.jobsException.JobNegativeException;
 import models.ModelFactory;
+import models.cut.Cut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Custom noOverlap constraint to be used with the jobShop class.
  */
 public class CustomNoOverlapConstraint extends IloCustomConstraint {
 
+    private final static Logger logger = LoggerFactory.getLogger(CustomNoOverlapConstraint.class);
     private final Jobs jobs;
     private IloIntVar[][] start;
+    private LinkedList<DomainSlot> alreadyRemoved;
 
     private LinkedList<Job> getJobs(IloIntervalVar[] vars, int tMaxValue) {
         LinkedList<Job> jobList = new LinkedList<>();
@@ -46,9 +51,11 @@ public class CustomNoOverlapConstraint extends IloCustomConstraint {
 
         this.jobs = new Jobs(jobList);
         this.start = new IloIntVar[vars.length][];
+        this.alreadyRemoved = new LinkedList<>();
 
         for (int i = 0; i < vars.length; i++) {
             start[i] = cp.intVarArray(tMaxValue + 1, 0, 1);
+            logger.debug("Custom constraint init : number of added variables = " + start.length);
             for (IloIntVar v : start[i]) {
                 addVar(v);
             }
@@ -58,13 +65,17 @@ public class CustomNoOverlapConstraint extends IloCustomConstraint {
     @Override
     public void execute() {
 
-        System.out.println("Execute custom constraint");
+        logger.info("Execution of custom constraint");
 
         DomainReduction dr = new DomainReduction(ModelFactory.lp(jobs));
         List<DomainSlot> invalidStart = dr.getInvalidStart();
+//        alreadyRemoved.addAll(invalidStart);
+
+        Collections.sort(invalidStart);
 
         for (DomainSlot domainSlot : invalidStart) {
             removeValue(start[domainSlot.getI()][domainSlot.getT()], 1);
+            logger.debug("Custom constraint execute : removed domainslot i:" + domainSlot.getI() + ", t:" + domainSlot.getT());
         }
     }
 

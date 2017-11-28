@@ -3,13 +3,11 @@ package generate;
 import com.google.common.collect.ImmutableList;
 import io.DataReader;
 import io.DisplayConst;
-import io.GetData;
 import jobs.Jobs;
 import models.Model;
 import models.ModelFactory;
 import models.Solution;
 import models.cut.Cut;
-import models.cut.Cuts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
