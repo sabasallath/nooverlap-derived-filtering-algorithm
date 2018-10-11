@@ -28,6 +28,7 @@ public class CustomNoOverlapConstraint extends IloCustomConstraint {
 
     private final static Logger logger = LoggerFactory.getLogger(CustomNoOverlapConstraint.class);
     private final Jobs jobs;
+    private final IloIntervalVar[] vars;
     private IloIntVar[][] start;
     private LinkedList<DomainSlot> alreadyRemoved;
 
@@ -52,14 +53,15 @@ public class CustomNoOverlapConstraint extends IloCustomConstraint {
         this.jobs = new Jobs(jobList);
         this.start = new IloIntVar[vars.length][];
         this.alreadyRemoved = new LinkedList<>();
+        this.vars = vars;
 
-        for (int i = 0; i < vars.length; i++) {
-            start[i] = cp.intVarArray(tMaxValue + 1, 0, 1);
-            logger.debug("Custom constraint init : number of added variables = " + start.length);
-            for (IloIntVar v : start[i]) {
-                addVar(v);
-            }
-        }
+//        for (int i = 0; i < vars.length; i++) {
+//            start[i] = cp.intVarArray(tMaxValue + 1, 0, 1);
+//            logger.debug("Custom constraint init : number of added variables = " + start.length);
+//            for (IloIntVar v : start[i]) {
+//                addVar(v);
+//            }
+//        }
     }
 
     @Override
@@ -74,8 +76,11 @@ public class CustomNoOverlapConstraint extends IloCustomConstraint {
         Collections.sort(invalidStart);
 
         for (DomainSlot domainSlot : invalidStart) {
-            removeValue(start[domainSlot.getI()][domainSlot.getT()], 1);
-            logger.debug("Custom constraint execute : removed domainslot i:" + domainSlot.getI() + ", t:" + domainSlot.getT());
+//            removeValue(start[domainSlot.getI()][domainSlot.getT()]., 1);
+//            logger.debug("Custom constraint execute : removed domainslot i:" + domainSlot.getI() + ", t:" + domainSlot.getT());
+
+//            removeValue(this.vars[0]);
+
         }
     }
 

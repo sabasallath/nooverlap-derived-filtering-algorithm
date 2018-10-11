@@ -18,17 +18,6 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * The Main class of the project.
- * The purpose of the project is to derive a filtering algorithm
- * from a linear relaxation of a MIP of the global constraint noOverlap
- * in scheduling.
- * In that regards this CLI interface generate and display data from loaded model.
- * There is 3 main option :
- * -g to generate detailed result for one model in particular.
- * -r for an overview of multiple model result.
- * -j run a jobshop instance with the custom noOverlap constraint.
- */
 public class Main {
 
     private static JCommander jc;
@@ -59,9 +48,6 @@ public class Main {
     @Parameter(names = {"--debug", "-d"}, description="See some debug information", hidden = true, order = 7)
     private boolean debug = false;
 
-    /**
-     * Validator class to check if the Cut input on the command line is in the right format
-     */
     public static class ValidateCut implements IParameterValidator {
         public void validate(String name, String value) throws ParameterException {
             boolean matches = Cut.isMatches(value);
@@ -131,7 +117,6 @@ public class Main {
                 files.forEach(e -> logger.info("Adding "  + e.toString()));
                 logger.info("Starting jobshop computation");
 
-                //jobshop_test();
                 for (File file : files) {
                     new JobShopWithBound(file.getAbsolutePath());
                 }
@@ -143,7 +128,7 @@ public class Main {
     }
 
     private String logName() {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder("");
         if (grids) sb.append("g");
         if (relaxation) sb.append("r");
         if (jobshop) sb.append("j");

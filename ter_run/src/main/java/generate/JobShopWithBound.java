@@ -5,8 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Bound Custom constraint jobshop with the optimal value of
- * with the JobShop with no custom Constraint.
+ * Bound Custom constraint jobshop with the objective value of
+ * the JobShop with no custom Constraint.
  */
 public class JobShopWithBound {
 
